@@ -79,6 +79,54 @@
       <div id="upload-status" style="display: none; margin-top: 0.75rem; font-size: 0.9rem; font-weight: 600;"></div>
     </div>
 
+    <!-- Template Management Section -->
+    <div class="form-card" style="margin-bottom: 2rem;">
+      <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-pen-to-square"></i> 核對流程項目管理 (修改前台核對內容)
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+        在此新增、修改、刪除或微調前台的核對細節。儲存成功後，前台首頁將會即時呈現變更。
+      </p>
+      
+      <!-- Role Tabs for Editor -->
+      <div class="day-filters" style="margin-bottom: 1.25rem; justify-content: flex-start; gap: 0.5rem;">
+        <button type="button" class="day-btn active" id="editor-sound-tab">音控流程模板</button>
+        <button type="button" class="day-btn" id="editor-host-tab">主持流程模板</button>
+      </div>
+
+      <!-- Editor Table Container -->
+      <div class="template-editor-table-wrapper">
+        <table class="template-editor-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">分類區段 (Section)</th>
+              <th style="width: 15%;">標籤 (Badge)</th>
+              <th style="width: 40%;">核對內容文字</th>
+              <th style="width: 13%;">適用星期</th>
+              <th style="width: 12%; text-align: center;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="template-editor-rows">
+            <!-- Dynamically populated in admin.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Editor Buttons -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+        <button type="button" id="editor-add-item-btn" class="day-btn" style="background: var(--accent-soft); color: var(--primary); border: 1px solid var(--border-color); font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 0.25rem;">
+          <i class="fa-solid fa-plus-circle"></i> 新增核對項目
+        </button>
+        
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span id="editor-save-status" style="font-size: 0.85rem; font-weight: 600;"></span>
+          <button type="button" id="editor-save-btn" class="btn-detail" style="padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 700; border-radius: 10px; cursor: pointer; height: auto;">
+            <i class="fa-solid fa-floppy-disk"></i> 儲存此模板變更
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Search/Filter Controls -->
     <div class="filter-card">
       <div class="filter-title">
