@@ -1,0 +1,6 @@
+node_modules
+db.json
+active_schedule.xlsx
+.DS_Store
+.railway
+*.log

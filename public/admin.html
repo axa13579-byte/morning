@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>寰辰早會核對系統 - 管理後台</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="admin-header">
+      <div class="logo-container">
+        <div class="logo-icon" style="background: linear-gradient(135deg, var(--accent-cyan), var(--primary));">後</div>
+        <div class="logo-text">
+          <h1>核對管理後台</h1>
+          <p class="subtitle">檢視並管理所有音控與主持人的核對確認狀態</p>
+        </div>
+      </div>
+      <a href="index.html" class="btn-link">
+        <i class="fa-solid fa-arrow-left"></i> 返回核對首頁
+      </a>
+    </header>
+
+    <!-- Stats Panel -->
+    <div class="admin-stats">
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="stat-total">0</span>
+          <span class="stat-label">總提交次數</span>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="stat-sound">0</span>
+          <span class="stat-label">音控已核對</span>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon pink">
+          <i class="fa-solid fa-microphone-lines"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="stat-host">0</span>
+          <span class="stat-label">主持已核對</span>
+      </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="form-card" style="margin-bottom: 2rem;">
+      <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-cloud-arrow-up"></i> 上傳新月份課表 (Excel)
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+        請上傳新的早會課表 Excel 檔案。系統會自動解析週次、日程與值星輪值，並即時更新至首頁。
+      </p>
+      
+      <form id="upload-form" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <div style="flex-grow: 1; position: relative;">
+          <input type="file" id="schedule-file" accept=".xlsx, .xls" style="display: none;">
+          <label for="schedule-file" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.25rem; background: #FFFFFF; border: 2px dashed var(--border-color); border-radius: 12px; cursor: pointer; transition: var(--transition); font-weight: 500; font-size: 0.95rem;">
+            <span id="file-name-label" style="color: var(--text-secondary);"><i class="fa-regular fa-file-excel"></i> 點擊選取 Excel 檔案...</span>
+            <span style="font-size: 0.8rem; background: var(--accent-soft); color: var(--primary); padding: 2px 8px; border-radius: 6px;">瀏覽檔案</span>
+          </label>
+        </div>
+        <button type="submit" class="btn-detail" style="padding: 0.95rem 1.75rem; font-size: 0.95rem; font-weight: 700; border-radius: 12px; height: 50px;">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i> 開始上傳
+        </button>
+      </form>
+      <div id="upload-status" style="display: none; margin-top: 0.75rem; font-size: 0.9rem; font-weight: 600;"></div>
+    </div>
+
+    <!-- Search/Filter Controls -->
+    <div class="filter-card">
+      <div class="filter-title">
+        <i class="fa-solid fa-magnifying-glass"></i> 篩選紀錄：
+      </div>
+      <div style="display: flex; gap: 1rem; flex-grow: 1; justify-content: flex-end; flex-wrap: wrap;">
+        <input type="text" id="search-input" placeholder="搜尋姓名..." style="max-width: 250px; padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: 8px;">
+        <div class="day-filters">
+          <button class="day-btn active" id="filter-all-role">全部角色</button>
+          <button class="day-btn" id="filter-sound-role">僅看音控</button>
+          <button class="day-btn" id="filter-host-role">僅看主持</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submission List -->
+    <h2 style="font-size: 1.3rem; margin-bottom: 1.25rem; font-weight: 600; color: var(--text-secondary);">
+      <i class="fa-solid fa-list-check"></i> 確認紀錄列表
+    </h2>
+    <div class="submission-list" id="submission-list-container">
+      <div class="empty-state">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <p>正在載入數據...</p>
+      </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal-overlay" id="details-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-user-title">張小明 - 音控核對詳情</h3>
+          <button class="modal-close" id="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <span style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 0.25rem;">
+              提交時間：<span id="modal-time-text" style="color: white; font-weight: 500;">2026-06-26 12:00:00</span>
+            </span>
+          </div>
+          <div>
+            <div class="detail-section-title">
+              <i class="fa-solid fa-clipboard-list"></i> 已核對的流程細節
+            </div>
+            <div class="detail-item-list" id="modal-details-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
